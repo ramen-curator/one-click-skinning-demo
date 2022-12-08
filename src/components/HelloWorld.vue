@@ -1,80 +1,8 @@
 <template>
   <div class="hello">
+    <button @click="handleToggleTheme">切换主题</button>
     <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br />
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener"
-        >vue-cli documentation</a
-      >.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel"
-          target="_blank"
-          rel="noopener"
-          >babel</a
-        >
-      </li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li>
-        <a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a>
-      </li>
-      <li>
-        <a href="https://forum.vuejs.org" target="_blank" rel="noopener"
-          >Forum</a
-        >
-      </li>
-      <li>
-        <a href="https://chat.vuejs.org" target="_blank" rel="noopener"
-          >Community Chat</a
-        >
-      </li>
-      <li>
-        <a href="https://twitter.com/vuejs" target="_blank" rel="noopener"
-          >Twitter</a
-        >
-      </li>
-      <li>
-        <a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a>
-      </li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li>
-        <a href="https://router.vuejs.org" target="_blank" rel="noopener"
-          >vue-router</a
-        >
-      </li>
-      <li>
-        <a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-devtools#vue-devtools"
-          target="_blank"
-          rel="noopener"
-          >vue-devtools</a
-        >
-      </li>
-      <li>
-        <a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener"
-          >vue-loader</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/awesome-vue"
-          target="_blank"
-          rel="noopener"
-          >awesome-vue</a
-        >
-      </li>
-    </ul>
+    <p>yes</p>
   </div>
 </template>
 
@@ -84,16 +12,61 @@ export default {
   props: {
     msg: String,
   },
+  data() {
+    return {
+      themeNames: THEME_NAMES,
+      currentTheme: "default",
+    };
+  },
+  computed: {
+    currentThemeIndex() {
+      return THEME_NAMES.findIndex((item) => item === this.currentTheme);
+    },
+  },
+  mounted() {},
+  methods: {
+    handleToggleTheme() {
+      this.currentTheme = this.currentTheme === "default" ? "old" : "default";
+      document
+        .querySelector("body")
+        .setAttribute("data-theme", this.currentTheme);
+    },
+  },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+@mixin themify() {
+  @each $theme-name, $map in $themes-color {
+    [data-theme="#{$theme-name}"] & {
+      $theme-map: () !global;
+      @each $key, $value in $map {
+        $theme-map: map-merge(
+          $map1: $theme-map,
+          $map2: (
+            $key: $value,
+          ),
+        ) !global;
+      }
+      @content;
+    }
+  }
+}
+
+@function themed($key) {
+  @return map-get($theme-map, $key);
+}
+
 h1 {
-  color: $a-color;
+  @include themify() {
+    color: themed("color");
+  }
 }
 h3 {
-  color: $a-color;
+  @include themify() {
+    color: themed("color");
+  }
   margin: 40px 0 0;
 }
 ul {
