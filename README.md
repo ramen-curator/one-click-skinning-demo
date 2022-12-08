@@ -1,4 +1,4 @@
-# one-key-change-skin2
+# one-key-change-skin
 
 ## Project setup
 ```
