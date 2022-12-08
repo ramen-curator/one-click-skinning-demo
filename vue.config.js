@@ -3,8 +3,8 @@ const fs = require("fs");
 const webpack = require("webpack");
 
 const themeNames = fs
-  .readdirSync("./src/style/theme")
-  .filter((item) => fs.lstatSync("./src/style/theme/" + item).isDirectory());
+  .readdirSync("./src/styles/theme")
+  .filter((item) => fs.lstatSync("./src/styles/theme/" + item).isDirectory());
 
 module.exports = defineConfig({
   transpileDependencies: true,
