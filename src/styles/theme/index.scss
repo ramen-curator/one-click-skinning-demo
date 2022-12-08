@@ -1,0 +1,10 @@
+@import "../settings/variable.scss";
+
+$themes-color: (
+  default: (
+    color: $a-color,
+  ),
+  old: (
+    color: $b-color,
+  ),
+);
